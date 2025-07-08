@@ -20,24 +20,22 @@ MIN_SPACE=200000  # 200MB
 MIN_INODES=500    # 500 inodes
 
 INSTALL_LOGFILE="/tmp/btpanel-install.log"
-# exec > >(tee -a "$INSTALL_LOGFILE") 2>&1 
-
 Btapi_Url='https://install.baota.sbs'
 Check_Api=$(curl -Ss --connect-timeout 5 -m 2 $Btapi_Url/api/SetupCount)
 if [ "$Check_Api" != 'ok' ];then
-	echo "此宝塔第三方云端无法连接，因此安装过程已中止！";
-	exit 1;
+    echo "此宝塔第三方云端无法连接，因此安装过程已中止！";
+    exit 1;
 fi
 
 if [ $(whoami) != "root" ];then
-	echo "请使用root权限执行宝塔安装命令！"
-	exit 1;
+    echo "请使用root权限执行宝塔安装命令！"
+    exit 1;
 fi
 
 is64bit=$(getconf LONG_BIT)
 if [ "${is64bit}" != '64' ];then
-	echo "抱歉, 当前面板版本不支持32位系统, 请使用64位系统或安装宝塔5.9!";
-	exit 1
+    echo "抱歉, 当前面板版本不支持32位系统, 请使用64位系统或安装宝塔5.9!";
+    exit 1
 fi
 
 Ready_Check(){
@@ -45,7 +43,7 @@ Ready_Check(){
     ROOT_DISK_SPACE=$(df |grep /$|awk '{print $4}')
  
    if [ "${ROOT_DISK_SPACE}" -le $MIN_SPACE ];then
-	df -h
+        df -h
         echo -e "系统盘剩余空间不足 ${MIN_SPACE}KB 无法继续安装宝塔面板！"
         echo -e "请尝试清理磁盘空间后再重新进行安装"
         exit 1
@@ -57,24 +55,24 @@ Ready_Check(){
     fi
 
     ROOT_DISK_INODE=$(df -i|grep /$|awk '{print $2}')
-	if [ "${ROOT_DISK_INODE}" != "0" ];then
-		ROOT_DISK_INODE_FREE=$(df -i|grep /$|awk '{print $4}')
-		if [ "${ROOT_DISK_INODE_FREE}" -le $MIN_INODES ];then
-			echo -e "系统盘剩余inodes空间不足 ${MIN_INODES},无法继续安装！"
-			echo -e "请尝试清理磁盘空间后再重新进行安装"
-			exit 1
-		fi
-	fi
+    if [ "${ROOT_DISK_INODE}" != "0" ];then
+        ROOT_DISK_INODE_FREE=$(df -i|grep /$|awk '{print $4}')
+        if [ "${ROOT_DISK_INODE_FREE}" -le $MIN_INODES ];then
+            echo -e "系统盘剩余inodes空间不足 ${MIN_INODES},无法继续安装！"
+            echo -e "请尝试清理磁盘空间后再重新进行安装"
+            exit 1
+        fi
+    fi
 
-	WWW_DISK_INODE=$(df -i|grep /data|awk '{print $2}')
-	if [ "${WWW_DISK_INODE}" ] && [ "${WWW_DISK_INODE}" != "0" ] ;then
-		WWW_DISK_INODE_FREE=$(df -i|grep /data|awk '{print $4}')
-		if [ "${WWW_DISK_INODE_FREE}" ] && [ "${WWW_DISK_INODE_FREE}" -le $MIN_INODES ] ;then
-			echo -e "/www盘剩余inodes空间不足 ${MIN_INODES}, 无法继续安装！"
-			echo -e "请尝试清理磁盘空间后再重新进行安装"
-			exit 1
-		fi
-	fi
+    WWW_DISK_INODE=$(df -i|grep /data|awk '{print $2}')
+    if [ "${WWW_DISK_INODE}" ] && [ "${WWW_DISK_INODE}" != "0" ] ;then
+        WWW_DISK_INODE_FREE=$(df -i|grep /data|awk '{print $4}')
+        if [ "${WWW_DISK_INODE_FREE}" ] && [ "${WWW_DISK_INODE_FREE}" -le $MIN_INODES ] ;then
+            echo -e "/www盘剩余inodes空间不足 ${MIN_INODES}, 无法继续安装！"
+            echo -e "请尝试清理磁盘空间后再重新进行安装"
+            exit 1
+        fi
+    fi
 }
 
 # ================= 服务管理适配 =================
