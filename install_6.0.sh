@@ -137,4 +137,4 @@ echo "alias btstop='pkill -f \"python tools.py\"'" >> ~/.bashrc
 echo "安装完成！"
 echo "启动命令: btstart"
 echo "停止命令: btstop"
-echo "访问地址: http://127.0.0.1:8888"
+echo "访问地址: http://127.0.0.1:5701"
