@@ -104,7 +104,7 @@ Install_Python_Lib(){
 }
 
 Install_Bt(){
-    panelPort=8888  # 固定端口
+    panelPort=5701  # 固定端口
     
     mkdir -p $setup_path/server/panel
     cd $setup_path/server/panel
